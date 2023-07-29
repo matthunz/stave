@@ -54,6 +54,9 @@ remove :: MidiNote -> MidiSet -> MidiSet
 remove (MidiNote note) (MidiSet set) =
   MidiSet $ set .&. complement (1 `shiftL` fromIntegral note)
 
+contains :: MidiSet -> MidiNote -> Bool
+contains (MidiSet set) (MidiNote note) = set .&. (1 `shiftR` fromIntegral note) == 1
+
 notes :: MidiSet -> [MidiNote]
 notes (MidiSet w) = map MidiNote (go w 0)
   where
