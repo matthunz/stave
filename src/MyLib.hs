@@ -36,6 +36,11 @@ octave (MidiNote note) = toEnum (fromIntegral (note `div` fromIntegral (fromEnum
 
 newtype MidiSet = MidiSet Word128
 
+interval :: MidiNote -> MidiNote -> Word8
+interval (MidiNote lhs) (MidiNote rhs) = fromInteger . abs $ toInt lhs - toInt rhs
+  where
+    toInt x = fromIntegral x :: Integer
+
 instance Show MidiSet where
   show set = show $ notes set
 
@@ -56,7 +61,8 @@ notes (MidiSet w) = map MidiNote (go w 0)
 data Chord = Chord
   { root :: MidiNote,
     set :: MidiSet
-  } deriving (Show)
+  }
+  deriving (Show)
 
 fromMidi :: MidiNote -> MidiSet -> Chord
 fromMidi r set = Chord r (remove r set)
