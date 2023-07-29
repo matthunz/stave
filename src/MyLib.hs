@@ -42,6 +42,9 @@ instance Show MidiSet where
 insert :: MidiNote -> MidiSet -> MidiSet
 insert (MidiNote note) (MidiSet set) = MidiSet $ set .|. (1 `shiftL` fromIntegral note)
 
+remove :: MidiNote -> MidiSet -> MidiSet
+remove (MidiNote note) (MidiSet set) = MidiSet $ set .&. complement (1 `shiftL` fromIntegral note)
+
 notes :: MidiSet -> [MidiNote]
 notes (MidiSet w) = map MidiNote (go w 0)
   where
@@ -49,3 +52,11 @@ notes (MidiSet w) = map MidiNote (go w 0)
     go n pos
       | n .&. 1 == 1 = pos : go (n `shiftR` 1) (pos + 1)
       | otherwise = go (n `shiftR` 1) (pos + 1)
+
+data Chord = Chord
+  { root :: MidiNote,
+    set :: MidiSet
+  } deriving (Show)
+
+fromMidi :: MidiNote -> MidiSet -> Chord
+fromMidi r set = Chord r (remove r set)
