@@ -14,7 +14,7 @@ data Octave = OctaveNeg1 | Octave0 | Octave1 | Octave2 | Octave3 | Octave4 | Oct
   deriving (Enum)
 
 instance Show Octave where
-  show octave = show $ fromEnum octave
+  show octave = show . fromIntegral $ fromEnum octave - 1
 
 newtype MidiNote = MidiNote Word8
 
@@ -32,12 +32,15 @@ pitch :: MidiNote -> Pitch
 pitch (MidiNote note) = toEnum . fromIntegral $ fromIntegral note `mod` (fromEnum (maxBound :: Pitch) + 1)
 
 octave :: MidiNote -> Octave
-octave (MidiNote note) = toEnum (fromIntegral (note `div` fromIntegral (fromEnum (maxBound :: Pitch) + 1)) - 1)
+octave (MidiNote note) = toEnum (fromIntegral (note `div` fromIntegral (fromEnum (maxBound :: Pitch) + 1)))
 
 newtype MidiSet = MidiSet Word128
 
-insert :: MidiNote -> MidiSet -> Word128
-insert (MidiNote note) (MidiSet set) = set .|. (1 `shiftL` fromIntegral note)
+instance Show MidiSet where
+  show set = show $ notes set
+
+insert :: MidiNote -> MidiSet -> MidiSet
+insert (MidiNote note) (MidiSet set) = MidiSet $ set .|. (1 `shiftL` fromIntegral note)
 
 notes :: MidiSet -> [MidiNote]
 notes (MidiSet w) = map MidiNote (go w 0)
