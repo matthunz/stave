@@ -11,19 +11,28 @@ data Pitch = C | CSharp | D | DSharp | E | F | FSharp | G | GSharp | A | ASharp 
   deriving (Show, Enum, Bounded)
 
 data Octave = OctaveNeg1 | Octave0 | Octave1 | Octave2 | Octave3 | Octave4 | Octave5 | Octave6 | Octave7
-  deriving (Enum, Show)
+  deriving (Enum)
+
+instance Show Octave where
+  show octave = show $ fromEnum octave
 
 newtype MidiNote = MidiNote Word8
+
+instance Show MidiNote where
+  show note = show (pitch note) ++ show (octave note)
 
 midiNote :: Pitch -> Octave -> MidiNote
 midiNote pitch octave =
   MidiNote $
-    (fromIntegral (fromEnum octave) + 1)
+    fromIntegral (fromEnum octave)
       * (fromIntegral (fromEnum (maxBound :: Pitch)) + 1)
       + fromIntegral (fromEnum pitch)
 
 pitch :: MidiNote -> Pitch
 pitch (MidiNote note) = toEnum . fromIntegral $ fromIntegral note `mod` (fromEnum (maxBound :: Pitch) + 1)
+
+octave :: MidiNote -> Octave
+octave (MidiNote note) = toEnum (fromIntegral (note `div` fromIntegral (fromEnum (maxBound :: Pitch) + 1)) - 1)
 
 newtype MidiSet = MidiSet Word128
 
