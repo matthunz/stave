@@ -2,6 +2,7 @@ module Music.Midi
   ( Pitch (..),
     Octave (..),
     MidiNote,
+    unMidiNote,
     midiNote,
     pitch,
     octave,
@@ -32,6 +33,9 @@ newtype MidiNote = MidiNote Word8
 
 instance Show MidiNote where
   show note = show (pitch note) ++ show (octave note)
+
+unMidiNote :: MidiNote -> Word8
+unMidiNote (MidiNote n) = n
 
 -- | Create a midi note from a pitch and octave.
 midiNote :: Pitch -> Octave -> MidiNote
