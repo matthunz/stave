@@ -18,11 +18,7 @@ import Data.Bits (Bits (complement, shiftL, shiftR, (.&.), (.|.)))
 import Data.WideWord (Word128)
 import Data.Word (Word8)
 import GHC.Read (readPrec)
-
-
-
-data Pitch = C | CSharp | D | DSharp | E | F | FSharp | G | GSharp | A | ASharp | B
-  deriving (Show, Enum, Bounded)
+import Music.Pitch (Pitch)
 
 data Octave = OctaveNeg1 | Octave0 | Octave1 | Octave2 | Octave3 | Octave4 | Octave5 | Octave6 | Octave7
   deriving (Enum)

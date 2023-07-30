@@ -1,7 +1,7 @@
 module Music.Note where
 
-data Natural = C | D | E | F | G | A | B
-  deriving (Bounded, Enum, Eq, Show)
+import Music.Natural (Natural)
+import qualified Music.Pitch as Pitch
 
 data Accidental = Natural | Flat | DoubleFlat | Sharp | DoubleSharp
   deriving (Eq)
@@ -14,4 +14,7 @@ instance Show Accidental where
     Sharp -> "#"
     DoubleSharp -> "##"
 
-data Note = Note Natural Accidental deriving (Eq, Show)
+data Note = Note Natural Accidental deriving (Eq)
+
+instance Show Note where
+  show (Note natural accidental) = show natural ++ show accidental
