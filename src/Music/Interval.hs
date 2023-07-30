@@ -4,6 +4,7 @@ module Music.Interval
     quality,
     number,
     fromSemitones,
+    showFunction
   )
 where
 
@@ -22,6 +23,15 @@ data Interval = Interval Quality Word8
 
 instance Show Interval where
   show (Interval q n) = show q ++ show n
+
+-- | Display the interval as a chord function.
+showFunction :: Interval -> String
+showFunction (Interval q n) =
+  case q of
+    Minor -> "b"
+    Diminished -> "b"
+    _ -> ""
+    ++ show n
 
 quality :: Interval -> Quality
 quality (Interval q _) = q
