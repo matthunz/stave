@@ -6,6 +6,7 @@ module Music.Midi
     pitch,
     octave,
     interval,
+    fromPitches,
     MidiSet,
     contains,
     insert,
@@ -52,6 +53,21 @@ octave (MidiNote note) =
   toEnum $
     fromIntegral
       (note `div` fromIntegral (fromEnum (maxBound :: Pitch) + 1))
+
+-- | Convert a list of pitches to midinotes in ascending order.
+fromPitches :: [Pitch] -> Octave -> [MidiNote]
+fromPitches pitches start = notes
+  where
+    (notes, _, _) = foldr go ([], start, Nothing) (reverse pitches)
+    go p (notes, oct, lastPitch) =
+      case lastPitch of
+        Just old ->
+          if fromEnum p <= fromEnum old
+            then ret . toEnum $ fromEnum oct + 1
+            else ret oct
+        Nothing -> ret oct
+      where
+        ret o = (notes ++ [midiNote p o], o, Just p)
 
 -- | Bitset of midi notes.
 newtype MidiSet = MidiSet Word128
