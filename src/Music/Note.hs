@@ -21,8 +21,8 @@ data Note = Note Natural Accidental deriving (Eq)
 instance Show Note where
   show (Note natural accidental) = show natural ++ show accidental
 
-fromPitch :: Pitch -> Note
-fromPitch pitch = case pitch of
+fromSharp :: Pitch -> Note
+fromSharp pitch = case pitch of
   Pitch.C -> Note Natural.C Natural
   Pitch.CSharp -> Note Natural.C Sharp
   Pitch.D -> Note Natural.D Natural
@@ -36,3 +36,17 @@ fromPitch pitch = case pitch of
   Pitch.ASharp -> Note Natural.A Sharp
   Pitch.B -> Note Natural.B Natural
 
+fromFlat :: Pitch -> Note
+fromFlat pitch = case pitch of
+  Pitch.C -> Note Natural.C Natural
+  Pitch.CSharp -> Note Natural.D Flat
+  Pitch.D -> Note Natural.D Natural
+  Pitch.DSharp -> Note Natural.E Flat
+  Pitch.E -> Note Natural.E Natural
+  Pitch.F -> Note Natural.F Natural
+  Pitch.FSharp -> Note Natural.G Flat
+  Pitch.G -> Note Natural.G Natural
+  Pitch.GSharp -> Note Natural.A Flat
+  Pitch.A -> Note Natural.A Natural
+  Pitch.ASharp -> Note Natural.B Flat
+  Pitch.B -> Note Natural.B Natural
