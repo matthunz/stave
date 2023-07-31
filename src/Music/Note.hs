@@ -16,10 +16,14 @@ instance Show Accidental where
     Sharp -> "#"
     DoubleSharp -> "##"
 
+
+
 data Note = Note Natural Accidental deriving (Eq)
 
 instance Show Note where
   show (Note natural accidental) = show natural ++ show accidental
+
+
 
 fromSharp :: Pitch -> Note
 fromSharp pitch = case pitch of
